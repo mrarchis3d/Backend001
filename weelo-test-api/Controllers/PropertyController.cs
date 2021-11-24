@@ -83,7 +83,7 @@ namespace weelo_test_api.Controllers
         public async Task<IActionResult> DeleteProperty(Guid idProperty)
         {
             _logger.LogTrace($"Starting Controller {nameof(DeleteProperty)}");
-            await _ownerService.Delete(idOwner);
+            await _ownerService.Delete(idProperty);
             _logger.LogTrace($"End Controller {nameof(DeleteProperty)}");
             return Ok();
         }

@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using UnitOfWork.Interfaces;
 
 namespace UnitOfWork.SqlServer
@@ -27,6 +28,7 @@ namespace UnitOfWork.SqlServer
                 _context.Dispose();
             }
             Repositories = null;
+            GC.SuppressFinalize(this);
         }
 
         public void SaveChanges()

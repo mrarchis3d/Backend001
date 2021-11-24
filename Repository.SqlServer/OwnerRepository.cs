@@ -36,7 +36,7 @@ namespace Repository.SqlServer
         public async Task Delete(Guid idOwner)
         {
             var command = "dbo.DeleteOwner";
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
             parameters.Add("@IdOwner", idOwner);
             await this.ExecuteSP(command, parameters);
         }

@@ -16,8 +16,8 @@ namespace ServiceGrpcTest.Services
     /// </summary>
     public class OwnerService : IOwnerService
     {
-        private IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public OwnerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._mapper = mapper;
@@ -30,11 +30,9 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Create(OwnerDTO dtoOwner)
         {
-            using (var unit = this._unitOfWork.CreateRepository())
-            {
-                Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
-                await unit.Repositories.OwnerRepository.Create(owner);
-            }
+            using var unit = this._unitOfWork.CreateRepository();
+            Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
+            await unit.Repositories.OwnerRepository.Create(owner);
         }
         /// <summary>
         /// Method for update owner
@@ -43,10 +41,8 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Delete(Guid idOwner)
         {
-            using (var unit = this._unitOfWork.CreateRepository())
-            {
-                await unit.Repositories.OwnerRepository.Delete(idOwner);
-            }
+            using IUnitOfWorkAdapter unit = this._unitOfWork.CreateRepository();
+            await unit.Repositories.OwnerRepository.Delete(idOwner);
         }
         /// <summary>
         /// method for get all owners
@@ -54,12 +50,10 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task<IEnumerable<OwnerDTO>> GetAllOwner()
         {
-            using (var unit = this._unitOfWork.CreateRepository())
-            {
-                var result =  await unit.Repositories.OwnerRepository.GetAllOwner();
-                IEnumerable<OwnerDTO> owners = _mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDTO>>(result);
-                return owners;
-            }
+            using var unit = this._unitOfWork.CreateRepository();
+            var result = await unit.Repositories.OwnerRepository.GetAllOwner();
+            IEnumerable<OwnerDTO> owners = _mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDTO>>(result);
+            return owners;
         }
 
         /// <summary>
@@ -69,11 +63,9 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Update(OwnerDTO dtoOwner)
         {
-            using (var unit = this._unitOfWork.CreateRepository())
-            {
-                Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
-                await unit.Repositories.OwnerRepository.Update(owner);
-            }
+            using var unit = this._unitOfWork.CreateRepository();
+            Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
+            await unit.Repositories.OwnerRepository.Update(owner);
         }
     }
 }

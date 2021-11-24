@@ -28,26 +28,25 @@ namespace Repository.SqlServer
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand(command, this._context, this._transaction))
+                using SqlCommand cmd = new(command, this._context, this._transaction);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                if (dtoParameters != null)
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    if (dtoParameters != null)
-                    {
-                        var parametersObject = dtoParameters.GetType().GetProperties();
-                        getPropertiesForRead(cmd.Parameters, parametersObject, dtoParameters);
-                    }
-                    var response = new List<T>();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            response.Add(this.MapDataToObject<T>(reader));
-                        }
-                    }
-                    return response;
+                    var parametersObject = dtoParameters.GetType().GetProperties();
+                    GetPropertiesForRead(cmd.Parameters, parametersObject, dtoParameters);
                 }
-            }catch(Exception ex)
+                var response = new List<T>();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        response.Add(MapDataToObject<T>(reader));
+                    }
+                }
+                return response;
+            }
+            catch(Exception ex)
             {
                 throw new GlobalExceptionError(ErrorMessages.ERROR_ON_EXCECUTE_STORE_PROCEDURE, ex);
             }
@@ -65,25 +64,23 @@ namespace Repository.SqlServer
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand(command, this._context, this._transaction))
+                using SqlCommand cmd = new(command, this._context, this._transaction);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                foreach (var paramt in parameters)
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    foreach (var paramt in parameters)
-                    {
-                        cmd.Parameters.Add(new SqlParameter(paramt.Key, paramt.Value));
-                    }
-
-                    var response = new List<T>();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            response.Add(this.MapDataToObject<T>(reader));
-                        }
-                    }
-                    return response;
+                    cmd.Parameters.Add(new SqlParameter(paramt.Key, paramt.Value));
                 }
+
+                var response = new List<T>();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        response.Add(MapDataToObject<T>(reader));
+                    }
+                }
+                return response;
             }
             catch (Exception ex)
             {
@@ -103,15 +100,14 @@ namespace Repository.SqlServer
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand(command, this._context, this._transaction))
-                {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    var parametersObject = dtoParameters.GetType().GetProperties();
-                    getPropertiesForCreate(cmd.Parameters, parametersObject, dtoParameters);
-                    await cmd.ExecuteNonQueryAsync();
-                    await this._transaction.CommitAsync();
-                }
-            }catch (Exception ex)
+                using SqlCommand cmd = new(command, this._context, this._transaction);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                var parametersObject = dtoParameters.GetType().GetProperties();
+                GetPropertiesForCreate(cmd.Parameters, parametersObject, dtoParameters);
+                await cmd.ExecuteNonQueryAsync();
+                await this._transaction.CommitAsync();
+            }
+            catch (Exception ex)
             {
                 throw new GlobalExceptionError(ErrorMessages.ERROR_ON_EXCECUTE_STORE_PROCEDURE, ex);
             }
@@ -128,14 +124,12 @@ namespace Repository.SqlServer
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand(command, this._context, this._transaction))
-                {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    var parametersObject = dtoParameters.GetType().GetProperties();
-                    getPropertiesForParam(cmd.Parameters, parametersObject, dtoParameters);
-                    await cmd.ExecuteNonQueryAsync();
-                    await this._transaction.CommitAsync();
-                }
+                using SqlCommand cmd = new(command, this._context, this._transaction);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                var parametersObject = dtoParameters.GetType().GetProperties();
+                GetPropertiesForParam(cmd.Parameters, parametersObject, dtoParameters);
+                await cmd.ExecuteNonQueryAsync();
+                await this._transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -154,17 +148,15 @@ namespace Repository.SqlServer
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand(command, this._context, this._transaction))
-                {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    if(parameters!=null)
-                        foreach (var paramt in parameters)
-                        {
-                            cmd.Parameters.Add(new SqlParameter(paramt.Key, paramt.Value));
-                        }
-                    await cmd.ExecuteNonQueryAsync();
-                    await this._transaction.CommitAsync();
-                }
+                using SqlCommand cmd = new(command, _context, this._transaction);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                if (parameters != null)
+                    foreach (var paramt in parameters)
+                    {
+                        cmd.Parameters.Add(new SqlParameter(paramt.Key, paramt.Value));
+                    }
+                await cmd.ExecuteNonQueryAsync();
+                await this._transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -177,7 +169,7 @@ namespace Repository.SqlServer
         /// <typeparam name="T"></typeparam>
         /// <param name="dataReader"></param>
         /// <param name="newObject"></param>
-        private T MapDataToObject<T>(SqlDataReader dataReader) where T: new()
+        private static T MapDataToObject<T>(SqlDataReader dataReader) where T: new()
         {
             var newObject = new T();
             // Fast Member Usage
@@ -204,7 +196,7 @@ namespace Repository.SqlServer
         /// <param name="parameters"></param>
         /// <param name="parametersObject"></param>
         /// <param name="dtoParameters"></param>
-        private void getPropertiesForCreate(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
+        private static void GetPropertiesForCreate(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
         {
             foreach (PropertyInfo prop in parametersObject)
             {
@@ -212,8 +204,7 @@ namespace Repository.SqlServer
                 var flag = false;
                 foreach (object attr in attrs)
                 {
-                    IdKey idkey = attr as IdKey;
-                    if (idkey != null)
+                    if (attr is IdKey idkey)
                     {
                         flag = true;
                         continue;
@@ -230,7 +221,7 @@ namespace Repository.SqlServer
         /// <param name="parameters"></param>
         /// <param name="parametersObject"></param>
         /// <param name="dtoParameters"></param>
-        private void getPropertiesForParam(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
+        private static void GetPropertiesForParam(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
         {
             foreach (PropertyInfo prop in parametersObject)
             {
@@ -243,7 +234,7 @@ namespace Repository.SqlServer
         /// <param name="parameters"></param>
         /// <param name="parametersObject"></param>
         /// <param name="dtoParameters"></param>
-        private void getPropertiesForRead(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
+        private static void GetPropertiesForRead(SqlParameterCollection parameters, PropertyInfo[] parametersObject, Object dtoParameters)
         {
             foreach (PropertyInfo prop in parametersObject)
             {
@@ -251,8 +242,7 @@ namespace Repository.SqlServer
                 var flag = false;
                 foreach (object attr in attrs)
                 {
-                    NoRead noRead = attr as NoRead;
-                    if (noRead != null)
+                    if (attr is NoRead noRead)
                     {
                         flag = true;
                         continue;

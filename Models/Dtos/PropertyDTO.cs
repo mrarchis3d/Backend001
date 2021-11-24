@@ -5,7 +5,7 @@ namespace Models.Dtos
     /// <summary>
     /// Property dto
     /// </summary>
-    class PropertyDTO
+    public class PropertyDTO
     {
         public Guid? IdProperty { get; set; }
         public string Name { get; set; }

@@ -2,6 +2,9 @@
 
 namespace Models.Entities
 {
+    /// <summary>
+    /// Entity for property
+    /// </summary>
     public class Property
     {
         public Guid IdProperty { get; set; }

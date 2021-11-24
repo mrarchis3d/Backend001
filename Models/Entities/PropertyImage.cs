@@ -2,6 +2,9 @@
 
 namespace Models.Entities
 {
+    /// <summary>
+    /// Entity for Property images
+    /// </summary>
     public class PropertyImage
     {
         public Guid IdPropertyImage { get; set; }

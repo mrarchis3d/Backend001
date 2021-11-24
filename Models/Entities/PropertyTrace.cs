@@ -2,6 +2,9 @@
 
 namespace Models.Entities
 {
+    /// <summary>
+    /// Entity for property traces
+    /// </summary>
     public class PropertyTrace
     {
         public Guid IdPropertyTrace { get; set; }
