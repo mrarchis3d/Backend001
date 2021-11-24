@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpClientAPI";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+package test;
+
+// The greeting service definition.
+service Test {
+  // Sends a greeting
+  rpc InsertTest (TestModel) returns (google.protobuf.Empty);
+  rpc GetAllTests  (google.protobuf.Empty) returns (TestModels);
+}
+
+//Insertion and update TEst
+message TestModel {
+  string GuidTest=  1; 
+  string StrTest = 2;
+  bool BoolTest = 3;
+  int32 IntTest = 4;
+  int32 IntNullTest = 5;
+  bool BoolNullTest = 6;
+  bytes ByteArrayTest = 7;
+}
+message TestModels {
+	repeated TestModel TestModelList = 1;
+}
+
+
