@@ -1,4 +1,5 @@
 ﻿using Models.Dtos;
+using Models.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,6 @@ namespace Services.Interfaces
         Task Create(OwnerDTO owner);
         Task Delete(Guid idOwner);
         Task Update(OwnerDTO owner);
-        Task<IEnumerable<OwnerDTO>> GetAllOwner();
+        Task<IEnumerable<OwnerDTO>> GetAllOwner(Pagging pagging);
     }
 }

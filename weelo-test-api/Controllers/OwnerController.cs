@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.Dtos;
+using Models.Utils;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -29,13 +30,13 @@ namespace weelo_test_api.Controllers
         /// Get all owners form db
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost("GetAllOwner")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<OwnerDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllOwner()
+        public async Task<IActionResult> GetAllOwner(Pagging paagging)
         {
             _logger.LogTrace($"Starting Controller {nameof(GetAllOwner)}");
-            var result = await _ownerService.GetAllOwner();
+            var result = await _ownerService.GetAllOwner(paagging);
             _logger.LogTrace($"End Controller {nameof(GetAllOwner)}");
             return Ok(result);
         }

@@ -52,7 +52,6 @@ namespace Repository.SqlServer
             }
 
         }
- 
         /// <summary>
         /// Get data from SP, with a dictionary of params, Key = param, Value = value of parameter
         /// </summary>
@@ -201,19 +200,43 @@ namespace Repository.SqlServer
             foreach (PropertyInfo prop in parametersObject)
             {
                 object[] attrs = prop.GetCustomAttributes(false);
-                var flag = false;
-                foreach (object attr in attrs)
-                {
-                    if (attr is IdKey idkey)
-                    {
-                        flag = true;
-                        continue;
-                    }
-                }
-                if (flag)
+                if(DetectFiltersNoRead(attrs))
                     continue;
                 parameters.Add(new SqlParameter("@" + prop.Name, prop.GetValue(dtoParameters)));
             }
+        }
+        /// <summary>
+        /// Detect if the property is NoRead and if is IdKey
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <returns></returns>
+        private static bool DetectFiltersNoRead(object[] attrs)
+        {
+            foreach (object attr in attrs)
+            {
+                if (attr is IdKey || attr is NoRead)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Detect filtering this is for pagination
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static bool DetectFiltering(object[] attrs, object value)
+        {
+            foreach (object attr in attrs)
+            {
+                if (attr is Filtering && value != null)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         /// <summary>
         /// Get properties for updates object
@@ -239,20 +262,13 @@ namespace Repository.SqlServer
             foreach (PropertyInfo prop in parametersObject)
             {
                 object[] attrs = prop.GetCustomAttributes(false);
-                var flag = false;
-                foreach (object attr in attrs)
-                {
-                    if (attr is NoRead noRead)
-                    {
-                        flag = true;
-                        continue;
-                    }
-                }
-                if (flag)
+                if (DetectFiltering(attrs, prop.GetValue(dtoParameters)))
+                    continue;
+                if (DetectFiltersNoRead(attrs))
                     continue;
                 parameters.Add(new SqlParameter("@" + prop.Name, prop.GetValue(dtoParameters)));
+                
             }
         }
-
     }
 }

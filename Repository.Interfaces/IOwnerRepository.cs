@@ -1,4 +1,5 @@
 ﻿using Models.Entities;
+using Models.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,6 @@ namespace Repository.Interfaces
         Task Create(Owner owner);
         Task Delete(Guid idOwner);
         Task Update(Owner owner);
-        Task<IEnumerable<Owner>> GetAllOwner();
+        Task<IEnumerable<Owner>> GetAllOwner(Pagging pagging);
     }
 }

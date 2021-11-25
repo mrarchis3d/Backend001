@@ -1,5 +1,6 @@
 ﻿
 using Models.Entities;
+using Models.Utils;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -44,10 +45,10 @@ namespace Repository.SqlServer
         /// Get all Owners
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Owner>> GetAllOwner()
+        public async Task<IEnumerable<Owner>> GetAllOwner(Pagging pagging)
         {
             var command = "dbo.GetAllOwner";
-            return await this.GetDataFromStoreProcedure<Owner>(command);
+            return await this.GetDataFromStoreProcedure<Owner>(command, pagging);
         }
         /// <summary>
         /// Update Method for Owner

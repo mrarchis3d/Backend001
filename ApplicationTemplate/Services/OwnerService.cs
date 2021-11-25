@@ -3,6 +3,7 @@ using Common.Errors;
 using Common.Exceptions;
 using Models.Dtos;
 using Models.Entities;
+using Models.Utils;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -48,10 +49,13 @@ namespace ServiceGrpcTest.Services
         /// method for get all owners
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<OwnerDTO>> GetAllOwner()
+        public async Task<IEnumerable<OwnerDTO>> GetAllOwner(Pagging pagging)
         {
             using var unit = this._unitOfWork.CreateRepository();
-            var result = await unit.Repositories.OwnerRepository.GetAllOwner();
+            var result = await unit.Repositories.OwnerRepository.GetAllOwner(pagging);
+            //result = pagging.filter ? Utils.Filter(result, filter) : result;
+            //result = pagging.orderAsc ? Utils.OrderAsc(result, orderAsc) : result;
+            //result = pagging.orderDesc ? Utils.OrderDesc(result, orderDesc) : result;
             IEnumerable<OwnerDTO> owners = _mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDTO>>(result);
             return owners;
         }
