@@ -10,7 +10,7 @@ namespace Repository.Interfaces
     /// </summary>
     public interface IPropertyRepository
     {
-        Task Create(Property property);
+        Task<Guid> Create(Property property);
         Task Delete(Guid idProperty);
         Task Update(Property property);
         Task<IEnumerable<Property>> GetAllProperties();

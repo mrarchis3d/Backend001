@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Models.Dtos
 {
@@ -14,5 +15,6 @@ namespace Models.Dtos
         public string CodeInternal { get; set; }
         public int Year { get; set; }
         public Guid IdOwner { get; set; }
+        public IEnumerable<PropertyImageDTO> images { get; set; }
     }
 }

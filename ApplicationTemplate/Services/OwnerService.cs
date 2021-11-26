@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Common.Errors;
-using Common.Exceptions;
+using Common.Functions;
 using Models.Dtos;
 using Models.Entities;
 using Models.Utils;
@@ -21,8 +20,8 @@ namespace ServiceGrpcTest.Services
         private readonly IMapper _mapper;
         public OwnerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._mapper = mapper;
-            this._unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         /// <summary>
         /// Method for create Owner
@@ -31,7 +30,7 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Create(OwnerDTO dtoOwner)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
             await unit.Repositories.OwnerRepository.Create(owner);
         }
@@ -42,7 +41,7 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Delete(Guid idOwner)
         {
-            using IUnitOfWorkAdapter unit = this._unitOfWork.CreateRepository();
+            using IUnitOfWorkAdapter unit = _unitOfWork.CreateRepository();
             await unit.Repositories.OwnerRepository.Delete(idOwner);
         }
         /// <summary>
@@ -51,11 +50,11 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task<IEnumerable<OwnerDTO>> GetAllOwner(Pagging pagging)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             var result = await unit.Repositories.OwnerRepository.GetAllOwner(pagging);
-            //result = pagging.filter ? Utils.Filter(result, filter) : result;
-            //result = pagging.orderAsc ? Utils.OrderAsc(result, orderAsc) : result;
-            //result = pagging.orderDesc ? Utils.OrderDesc(result, orderDesc) : result;
+            result = String.IsNullOrEmpty(pagging.filter) ? Utilities.FilterByProperty(result, pagging.filter) : result;
+            result = String.IsNullOrEmpty(pagging.orderAsc) ? Utilities.OrderByAscProperty(result, pagging.orderAsc) : result;
+            result = String.IsNullOrEmpty(pagging.orderDesc) ? Utilities.OrderByDescProperty(result, pagging.orderDesc) : result;
             IEnumerable<OwnerDTO> owners = _mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDTO>>(result);
             return owners;
         }
@@ -67,7 +66,7 @@ namespace ServiceGrpcTest.Services
         /// <returns></returns>
         public async Task Update(OwnerDTO dtoOwner)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             Owner owner = _mapper.Map<OwnerDTO, Owner>(dtoOwner);
             await unit.Repositories.OwnerRepository.Update(owner);
         }

@@ -22,8 +22,8 @@ namespace weelo_test_api.Controllers
         public PropertyController(ILogger<PropertyController> logger,
                                 IPropertyService propertyService)
         {
-            this._logger = logger;
-            this._propertyService = propertyService;
+            _logger = logger;
+            _propertyService = propertyService;
         }
         /// <summary>
         /// Getting All parameters for calling News API

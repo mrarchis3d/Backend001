@@ -9,10 +9,12 @@ namespace UnitOfWork.SqlServer
     {
         public IOwnerRepository OwnerRepository { get; }
         public IPropertyRepository PropertyRepository { get; }
+        public IPropertyImageRepository PropertyImageRepository { get; }
         public UnitOfWorkSqlServerRepository(SqlConnection context, SqlTransaction transaction)
         {
-            this.OwnerRepository = new OwnerRepository(context, transaction);
-            this.PropertyRepository = new PropertyRepository(context, transaction);
+            OwnerRepository = new OwnerRepository(context, transaction);
+            PropertyRepository = new PropertyRepository(context, transaction);
+            PropertyImageRepository = new PropertyImageRepository(context, transaction);
         }
         
     }

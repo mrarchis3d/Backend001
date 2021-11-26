@@ -3,66 +3,64 @@ using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Repository.SqlServer
 {
-
-    /// <summary>
-    /// Repositoryy for property entity
-    /// </summary>
-    public class PropertyRepository : Repository, IPropertyRepository
+    public class PropertyImageRepository : Repository, IPropertyImageRepository
     {
-        public PropertyRepository(SqlConnection context, SqlTransaction transaction)
+        public PropertyImageRepository(SqlConnection context, SqlTransaction transaction)
         {
             _context = context;
             _transaction = transaction;
         }
 
         /// <summary>
-        /// Create Property of owner
+        /// Create Property Image of owner
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public async Task<Guid> Create(Property property)
+        public async Task<Guid> Create(PropertyImage propImage)
         {
-            var command = "dbo.InsertProperty";
-            var res = await Create(command, property);
+            var command = "dbo.InsertPropertyImage";
+            var res = await Create(command, propImage);
             return Guid.Parse(res.ToString());
         }
 
         /// <summary>
-        /// Delete Method for Property
+        /// Delete Method for Image Property 
         /// </summary>
         /// <param name="idOwner"></param>
         /// <returns></returns>
         public async Task Delete(Guid idProperty)
         {
-            var command = "dbo.DeleteProperty";
+            var command = "dbo.DeletePropertyImage";
             Dictionary<string, object> parameters = new();
             parameters.Add("@idProperty", idProperty);
             await ExecuteSP(command, parameters);
         }
         /// <summary>
-        /// Get all Properties
+        /// Get all Images properties
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Property>> GetAllProperties()
+        public async Task<IEnumerable<PropertyImage>> GetAllPropertyImages()
         {
-            var command = "dbo.GetAllProperties";
-            return await GetDataFromStoreProcedure<Property>(command);
+            var command = "dbo.GetAllPropertyImages";
+            return await GetDataFromStoreProcedure<PropertyImage>(command);
         }
 
 
         /// <summary>
-        /// Update Method for Property
+        /// Update Method for image Property 
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public async Task Update(Property owner)
+        public async Task Update(PropertyImage propImage)
         {
-            var command = "dbo.UpdateProperty";
-            await Update(command, owner);
+            var command = "dbo.UpdatePropertyImage";
+            await Update(command, propImage);
         }
     }
 }

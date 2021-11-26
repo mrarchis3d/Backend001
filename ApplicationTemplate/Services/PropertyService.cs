@@ -18,8 +18,8 @@ namespace Services.Services
         private readonly IMapper _mapper;
         public PropertyService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._mapper = mapper;
-            this._unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         /// <summary>
         /// Method for create property
@@ -28,9 +28,15 @@ namespace Services.Services
         /// <returns></returns>
         public async Task Create(PropertyDTO propertyDto)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             Property property = _mapper.Map<PropertyDTO, Property>(propertyDto);
-            await unit.Repositories.PropertyRepository.Create(property);
+            var idProperty = await unit.Repositories.PropertyRepository.Create(property);
+            foreach(PropertyImageDTO prop in propertyDto.images)
+            {
+                PropertyImage propImage = _mapper.Map<PropertyImageDTO, PropertyImage>(prop);
+                propImage.IdProperty = idProperty;
+                await unit.Repositories.PropertyImageRepository.Create(propImage);
+            }
         }
 
 
@@ -41,7 +47,7 @@ namespace Services.Services
         /// <returns></returns>
         public async Task Delete(Guid idProperty)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             await unit.Repositories.PropertyRepository.Delete(idProperty);
         }
 
@@ -52,7 +58,7 @@ namespace Services.Services
         /// <returns></returns>
         public async Task<IEnumerable<PropertyDTO>> GetAllProperties()
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             var result = await unit.Repositories.PropertyRepository.GetAllProperties();
             IEnumerable<PropertyDTO> owners = _mapper.Map<IEnumerable<Property>, IEnumerable<PropertyDTO>>(result);
             return owners;
@@ -65,7 +71,7 @@ namespace Services.Services
         /// <returns></returns>
         public async Task Update(PropertyDTO propertyDto)
         {
-            using var unit = this._unitOfWork.CreateRepository();
+            using var unit = _unitOfWork.CreateRepository();
             Property property = _mapper.Map<PropertyDTO, Property>(propertyDto);
             await unit.Repositories.PropertyRepository.Update(property);
         }

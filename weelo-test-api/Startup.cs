@@ -8,13 +8,14 @@ using Services.Interfaces;
 using System;
 using UnitOfWork.Interfaces;
 using UnitOfWork.SqlServer;
+using Services.Services;
 
 namespace weelo_test_api
 {
     public class Startup
     {
 
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -43,6 +44,8 @@ namespace weelo_test_api
 
             services.AddTransient<IUnitOfWork, UnitOfWorkSqlServer>();
             services.AddScoped<IOwnerService, OwnerService>();
+            services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IPropertyImageService, PropertyImageService>();
 
         }
 

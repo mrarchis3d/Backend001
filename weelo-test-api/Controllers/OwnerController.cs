@@ -23,8 +23,8 @@ namespace weelo_test_api.Controllers
         public OwnerController( ILogger<OwnerController> logger,
                                 IOwnerService ownerService)
         {
-            this._logger = logger;
-            this._ownerService = ownerService;
+            _logger = logger;
+            _ownerService = ownerService;
         }
         /// <summary>
         /// Get all owners form db

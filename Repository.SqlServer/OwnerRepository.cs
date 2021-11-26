@@ -16,18 +16,19 @@ namespace Repository.SqlServer
     {
         public OwnerRepository(SqlConnection context, SqlTransaction transaction)
         {
-            this._context = context;
-            this._transaction = transaction;
+            _context = context;
+            _transaction = transaction;
         }
         /// <summary>
         /// Create Method for Owner
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public async Task Create(Owner owner)
+        public async Task<Guid> Create(Owner owner)
         {
             var command = "dbo.InsertOwner";
-            await this.Create(command, owner);
+            var res = await Create(command, owner);
+            return Guid.Parse(res.ToString());
         }
         /// <summary>
         /// Delete Method for Owner
@@ -39,7 +40,7 @@ namespace Repository.SqlServer
             var command = "dbo.DeleteOwner";
             Dictionary<string, object> parameters = new();
             parameters.Add("@IdOwner", idOwner);
-            await this.ExecuteSP(command, parameters);
+            await ExecuteSP(command, parameters);
         }
         /// <summary>
         /// Get all Owners
@@ -48,7 +49,7 @@ namespace Repository.SqlServer
         public async Task<IEnumerable<Owner>> GetAllOwner(Pagging pagging)
         {
             var command = "dbo.GetAllOwner";
-            return await this.GetDataFromStoreProcedure<Owner>(command, pagging);
+            return await GetDataFromStoreProcedure<Owner>(command, pagging);
         }
         /// <summary>
         /// Update Method for Owner
@@ -58,7 +59,7 @@ namespace Repository.SqlServer
         public async Task Update(Owner owner)
         {
             var command = "dbo.UpdateOwner";
-            await this.Update(command, owner);
+            await Update(command, owner);
         }
     }
 }

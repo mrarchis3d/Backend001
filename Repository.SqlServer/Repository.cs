@@ -28,7 +28,7 @@ namespace Repository.SqlServer
         {
             try
             {
-                using SqlCommand cmd = new(command, this._context, this._transaction);
+                using SqlCommand cmd = new(command, _context, _transaction);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 if (dtoParameters != null)
                 {
@@ -63,7 +63,7 @@ namespace Repository.SqlServer
         {
             try
             {
-                using SqlCommand cmd = new(command, this._context, this._transaction);
+                using SqlCommand cmd = new(command, _context, _transaction);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 foreach (var paramt in parameters)
                 {
@@ -95,16 +95,17 @@ namespace Repository.SqlServer
         /// <param name="command"></param>
         /// <param name="dtoParameters"></param>
         /// <returns></returns>
-        protected async Task Create(string command, object dtoParameters)
+        protected async Task<object> Create(string command, object dtoParameters)
         {
             try
             {
-                using SqlCommand cmd = new(command, this._context, this._transaction);
+                using SqlCommand cmd = new(command, _context, _transaction);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 var parametersObject = dtoParameters.GetType().GetProperties();
                 GetPropertiesForCreate(cmd.Parameters, parametersObject, dtoParameters);
-                await cmd.ExecuteNonQueryAsync();
-                await this._transaction.CommitAsync();
+                var res = await cmd.ExecuteScalarAsync();
+                await _transaction.CommitAsync();
+                return res;
             }
             catch (Exception ex)
             {
@@ -123,12 +124,12 @@ namespace Repository.SqlServer
         {
             try
             {
-                using SqlCommand cmd = new(command, this._context, this._transaction);
+                using SqlCommand cmd = new(command, _context, _transaction);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 var parametersObject = dtoParameters.GetType().GetProperties();
                 GetPropertiesForParam(cmd.Parameters, parametersObject, dtoParameters);
                 await cmd.ExecuteNonQueryAsync();
-                await this._transaction.CommitAsync();
+                await _transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -147,7 +148,7 @@ namespace Repository.SqlServer
         {
             try
             {
-                using SqlCommand cmd = new(command, _context, this._transaction);
+                using SqlCommand cmd = new(command, _context, _transaction);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 if (parameters != null)
                     foreach (var paramt in parameters)
@@ -155,7 +156,7 @@ namespace Repository.SqlServer
                         cmd.Parameters.Add(new SqlParameter(paramt.Key, paramt.Value));
                     }
                 await cmd.ExecuteNonQueryAsync();
-                await this._transaction.CommitAsync();
+                await _transaction.CommitAsync();
             }
             catch (Exception ex)
             {

@@ -11,7 +11,7 @@ namespace Repository.Interfaces
     /// </summary>
     public interface IOwnerRepository
     {
-        Task Create(Owner owner);
+        Task<Guid> Create(Owner owner);
         Task Delete(Guid idOwner);
         Task Update(Owner owner);
         Task<IEnumerable<Owner>> GetAllOwner(Pagging pagging);
