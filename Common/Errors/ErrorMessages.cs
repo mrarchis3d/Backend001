@@ -7,5 +7,6 @@
         public static readonly string ERROR_ORDER_BY_ASC_PROPERTY = "ERROR_ORDER_BY_ASC_PROPERTY";
         public static readonly string ERROR_ORDER_BY_DESC_PROPERTY = "ERROR_ORDER_BY_DESC_PROPERTY";
         public static readonly string ERROR_FITERING_BY_PROPERTY = "ERROR_FITERING_BY_PROPERTY";
+        public static readonly string ERROR_ON_PARSING_GUID = "ERROR_ON_PARSING_GUID";
     }
 }

@@ -52,10 +52,11 @@ namespace ServiceGrpcTest.Services
         {
             using var unit = _unitOfWork.CreateRepository();
             var result = await unit.Repositories.OwnerRepository.GetAllOwner(pagging);
-            result = String.IsNullOrEmpty(pagging.filter) ? Utilities.FilterByProperty(result, pagging.filter) : result;
-            result = String.IsNullOrEmpty(pagging.orderAsc) ? Utilities.OrderByAscProperty(result, pagging.orderAsc) : result;
-            result = String.IsNullOrEmpty(pagging.orderDesc) ? Utilities.OrderByDescProperty(result, pagging.orderDesc) : result;
             IEnumerable<OwnerDTO> owners = _mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDTO>>(result);
+            owners = String.IsNullOrEmpty(pagging.filter) ? owners : Utilities.FilterByProperty(owners, pagging.filter);
+            owners = String.IsNullOrEmpty(pagging.orderAsc) ? owners : Utilities.OrderByAscProperty(owners, pagging.orderAsc);
+            owners = String.IsNullOrEmpty(pagging.orderDesc) ? owners : Utilities.OrderByDescProperty(owners, pagging.orderDesc);
+            
             return owners;
         }
 

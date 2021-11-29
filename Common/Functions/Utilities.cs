@@ -34,7 +34,8 @@ namespace Common.Functions
             {
                 if (lista.Any())
                 {
-                    return lista.OrderBy(x => x.GetType().GetProperty(nameProperty));
+
+                    return lista.OrderBy(x => x.GetType().GetProperty(nameProperty).GetValue(x));
                 }
                 return lista;
             }catch(GlobalExceptionError ex)
@@ -56,7 +57,7 @@ namespace Common.Functions
             {
                 if (lista.Any())
                 {
-                    return lista.OrderByDescending(x => x.GetType().GetProperty(nameProperty));
+                    return lista.OrderByDescending(x => x.GetType().GetProperty(nameProperty).GetValue(x));
                 }
                 return lista;
             }

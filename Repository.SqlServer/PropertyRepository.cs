@@ -1,4 +1,7 @@
-﻿using Models.Entities;
+﻿using Common.Exceptions;
+using Models.Dtos;
+using Models.Entities;
+using Models.Utils;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -26,9 +29,17 @@ namespace Repository.SqlServer
         /// <returns></returns>
         public async Task<Guid> Create(Property property)
         {
-            var command = "dbo.InsertProperty";
-            var res = await Create(command, property);
-            return Guid.Parse(res.ToString());
+            try
+            {
+                var command = "dbo.InsertProperty";
+                var res = await Create(command, property);
+                return Guid.Parse(res.ToString());
+
+            }catch(Exception ex)
+            {
+                throw new GlobalExceptionError(Common.Errors.ErrorMessages.ERROR_ON_PARSING_GUID, ex);
+            }
+
         }
 
         /// <summary>
@@ -40,17 +51,17 @@ namespace Repository.SqlServer
         {
             var command = "dbo.DeleteProperty";
             Dictionary<string, object> parameters = new();
-            parameters.Add("@idProperty", idProperty);
+            parameters.Add("@IdProperty", idProperty);
             await ExecuteSP(command, parameters);
         }
         /// <summary>
         /// Get all Properties
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Property>> GetAllProperties()
+        public async Task<IEnumerable<PropertyWithOwnerDTO>> GetAllPropertyWithOwner(Pagging pagging)
         {
-            var command = "dbo.GetAllProperties";
-            return await GetDataFromStoreProcedure<Property>(command);
+            var command = "dbo.GetAllPropertyWithOwner";
+            return await GetDataFromStoreProcedure<PropertyWithOwnerDTO>(command, pagging);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Attributes;
+using System;
 
 namespace Models.Entities
 {
@@ -7,6 +8,7 @@ namespace Models.Entities
     /// </summary>
     public class Property
     {
+        [IdKey]
         public Guid IdProperty { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

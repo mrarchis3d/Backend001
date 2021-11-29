@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Attributes;
+using System;
 
 namespace Models.Entities
 {
@@ -7,8 +8,9 @@ namespace Models.Entities
     /// </summary>
     public class PropertyImage
     {
+        [IdKey]
         public Guid IdPropertyImage { get; set; }
-        public Guid IdProperty { get; set; }
+        public Guid? IdProperty { get; set; }
         public byte[] File { get; set; }
         public bool Enabled { get; set; }
     }

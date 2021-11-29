@@ -2,7 +2,6 @@
 using Common.Functions;
 using Models.Dtos;
 using Models.Entities;
-using System.Text;
 
 namespace Models.Profiles
 {

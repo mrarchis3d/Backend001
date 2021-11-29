@@ -7,9 +7,8 @@ namespace Services.Interfaces
 {
     public interface IPropertyImageService
     {
-        Task Create(PropertyImageDTO propImage);
         Task Delete(Guid idPropImage);
-        Task Update(PropertyImageDTO propImage);
-        Task<IEnumerable<PropertyImageDTO>> GetAllPropertyImages();
+        Task Update(bool enabled, Guid IdImage);
+        Task<IEnumerable<PropertyImageDTO>> GetAllPropertyImages(bool getAll, Guid IdProperty);
     }
 }

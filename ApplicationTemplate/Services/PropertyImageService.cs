@@ -20,7 +20,7 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
         /// <summary>
-        /// Method for create property
+        /// Method for create image of property
         /// </summary>
         /// <param name="dtoOwner"></param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace Services.Services
 
 
         /// <summary>
-        /// Method for update property
+        /// Method for delete image
         /// </summary>
         /// <param name="idOwner"></param>
         /// <returns></returns>
@@ -44,27 +44,26 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// method for get all properties
+        /// method for get all images from property
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<PropertyImageDTO>> GetAllPropertyImages()
+        public async Task<IEnumerable<PropertyImageDTO>> GetAllPropertyImages(bool Enabled, Guid IdProperty)
         {
             using var unit = _unitOfWork.CreateRepository();
-            var result = await unit.Repositories.PropertyImageRepository.GetAllPropertyImages();
+            var result = await unit.Repositories.PropertyImageRepository.GetAllPropertyImages(Enabled, IdProperty);
             IEnumerable<PropertyImageDTO> images = _mapper.Map<IEnumerable<PropertyImage>, IEnumerable<PropertyImageDTO>>(result);
             return images;
         }
 
         /// <summary>
-        /// Method for update Properties
+        /// Method for update image set enable to image
         /// </summary>
         /// <param name="dtoOwner"></param>
         /// <returns></returns>
-        public async Task Update(PropertyImageDTO propImage)
+        public async Task Update(bool enabled, Guid IdImage)
         {
             using var unit = _unitOfWork.CreateRepository();
-            PropertyImage image = _mapper.Map<PropertyImageDTO, PropertyImage>(propImage);
-            await unit.Repositories.PropertyImageRepository.Update(image);
+            await unit.Repositories.PropertyImageRepository.Update(enabled, IdImage);
         }
 
     }

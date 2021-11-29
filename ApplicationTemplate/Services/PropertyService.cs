@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Common.Functions;
 using Models.Dtos;
 using Models.Entities;
+using Models.Utils;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -33,9 +35,10 @@ namespace Services.Services
             var idProperty = await unit.Repositories.PropertyRepository.Create(property);
             foreach(PropertyImageDTO prop in propertyDto.images)
             {
+                using var unitim = _unitOfWork.CreateRepository();
                 PropertyImage propImage = _mapper.Map<PropertyImageDTO, PropertyImage>(prop);
                 propImage.IdProperty = idProperty;
-                await unit.Repositories.PropertyImageRepository.Create(propImage);
+                await unitim.Repositories.PropertyImageRepository.Create(propImage);
             }
         }
 
@@ -56,12 +59,15 @@ namespace Services.Services
         /// method for get all properties
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<PropertyDTO>> GetAllProperties()
+        public async Task<IEnumerable<PropertyWithOwnerDTO>> GetAllPropertyWithOwner(Pagging pagging)
         {
             using var unit = _unitOfWork.CreateRepository();
-            var result = await unit.Repositories.PropertyRepository.GetAllProperties();
-            IEnumerable<PropertyDTO> owners = _mapper.Map<IEnumerable<Property>, IEnumerable<PropertyDTO>>(result);
-            return owners;
+            var result = await unit.Repositories.PropertyRepository.GetAllPropertyWithOwner(pagging);
+            result = String.IsNullOrEmpty(pagging.filter) ? result : Utilities.FilterByProperty(result, pagging.filter);
+            result = String.IsNullOrEmpty(pagging.orderAsc) ? result : Utilities.OrderByAscProperty(result, pagging.orderAsc);
+            result = String.IsNullOrEmpty(pagging.orderDesc) ? result : Utilities.OrderByDescProperty(result, pagging.orderDesc);
+
+            return result;
         }
 
         /// <summary>

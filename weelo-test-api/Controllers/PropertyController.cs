@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.Dtos;
+using Models.Utils;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -29,14 +30,14 @@ namespace weelo_test_api.Controllers
         /// Getting All parameters for calling News API
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<OwnerDTO>))]
+        [HttpPost("GetAllPropertyWithOwner")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PropertyWithOwnerDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllProperties()
+        public async Task<IActionResult> GetAllPropertyWithOwner(Pagging pagging)
         {
-            _logger.LogTrace($"Starting Controller {nameof(GetAllProperties)}");
-            var result = await _propertyService.GetAllProperties();
-            _logger.LogTrace($"End Controller {nameof(GetAllProperties)}");
+            _logger.LogTrace($"Starting Controller {nameof(GetAllPropertyWithOwner)}");
+            var result = await _propertyService.GetAllPropertyWithOwner(pagging);
+            _logger.LogTrace($"End Controller {nameof(GetAllPropertyWithOwner)}");
             return Ok(result);
         }
 

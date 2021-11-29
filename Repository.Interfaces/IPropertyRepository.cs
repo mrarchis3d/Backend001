@@ -1,4 +1,6 @@
-﻿using Models.Entities;
+﻿using Models.Dtos;
+using Models.Entities;
+using Models.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +15,6 @@ namespace Repository.Interfaces
         Task<Guid> Create(Property property);
         Task Delete(Guid idProperty);
         Task Update(Property property);
-        Task<IEnumerable<Property>> GetAllProperties();
+        Task<IEnumerable<PropertyWithOwnerDTO>> GetAllPropertyWithOwner(Pagging pagging);
     }
 }

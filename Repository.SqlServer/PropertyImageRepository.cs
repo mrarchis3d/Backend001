@@ -3,8 +3,6 @@ using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repository.SqlServer
@@ -22,11 +20,10 @@ namespace Repository.SqlServer
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public async Task<Guid> Create(PropertyImage propImage)
+        public async Task Create(PropertyImage propImage)
         {
             var command = "dbo.InsertPropertyImage";
-            var res = await Create(command, propImage);
-            return Guid.Parse(res.ToString());
+            await Create(command, propImage);
         }
 
         /// <summary>
@@ -45,10 +42,13 @@ namespace Repository.SqlServer
         /// Get all Images properties
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<PropertyImage>> GetAllPropertyImages()
+        public async Task<IEnumerable<PropertyImage>> GetAllPropertyImages(bool getAll, Guid IdProperty)
         {
             var command = "dbo.GetAllPropertyImages";
-            return await GetDataFromStoreProcedure<PropertyImage>(command);
+            Dictionary<string, object> parameters = new();
+            parameters.Add("@getAll", getAll);
+            parameters.Add("@IdProperty", IdProperty);
+            return await GetDataFromStoreProcedure<PropertyImage>(command, parameters);
         }
 
 
@@ -57,10 +57,13 @@ namespace Repository.SqlServer
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public async Task Update(PropertyImage propImage)
+        public async Task Update(bool enabled, Guid idImage)
         {
+            Dictionary<string, object> parameters = new();
+            parameters.Add("@Enabled", enabled);
+            parameters.Add("@IdImage", idImage);
             var command = "dbo.UpdatePropertyImage";
-            await Update(command, propImage);
+            await Update(command, parameters);
         }
     }
 }

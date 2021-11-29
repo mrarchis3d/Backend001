@@ -10,9 +10,9 @@ namespace Repository.Interfaces
     /// </summary>
     public interface IPropertyImageRepository
     {
-        Task<Guid> Create(PropertyImage propImage);
+        Task Create(PropertyImage propImage);
         Task Delete(Guid idpropImage);
-        Task Update(PropertyImage propImage);
-        Task<IEnumerable<PropertyImage>> GetAllPropertyImages();
+        Task Update(bool Enabled, Guid IdProperty);
+        Task<IEnumerable<PropertyImage>> GetAllPropertyImages(bool getAll, Guid IdProperty);
     }
 }

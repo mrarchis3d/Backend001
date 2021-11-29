@@ -4,6 +4,9 @@ using Models.Entities;
 
 namespace Models.Profiles
 {
+    /// <summary>
+    /// Property ´profiles
+    /// </summary>
     class PropertyProfile: Profile
     {
         public PropertyProfile()

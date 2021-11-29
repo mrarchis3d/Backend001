@@ -2,7 +2,7 @@
 
 namespace Models.Utils
 {
-    public class Pagging
+    public class Pagging: FilterDay
     {
         /// <summary>
         /// number of take page
