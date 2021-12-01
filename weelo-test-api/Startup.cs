@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using ServiceGrpcTest.Services;
+using Services.Services;
 using Services.Interfaces;
 using System;
 using UnitOfWork.Interfaces;
 using UnitOfWork.SqlServer;
-using Services.Services;
 
 namespace weelo_test_api
 {

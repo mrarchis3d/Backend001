@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitOfWork.Interfaces;
 
-namespace ServiceGrpcTest.Services
+namespace Services.Services
 {
     /// <summary>
     /// Implementation service for owners
