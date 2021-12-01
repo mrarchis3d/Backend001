@@ -10,11 +10,14 @@ namespace UnitOfWork.SqlServer
         public IOwnerRepository OwnerRepository { get; }
         public IPropertyRepository PropertyRepository { get; }
         public IPropertyImageRepository PropertyImageRepository { get; }
+        public IPropertyTraceRepository PropertyTraceRepository { get; }
+
         public UnitOfWorkSqlServerRepository(SqlConnection context, SqlTransaction transaction)
         {
             OwnerRepository = new OwnerRepository(context, transaction);
             PropertyRepository = new PropertyRepository(context, transaction);
             PropertyImageRepository = new PropertyImageRepository(context, transaction);
+            PropertyTraceRepository = new PropertyTraceRepository(context, transaction);
         }
         
     }

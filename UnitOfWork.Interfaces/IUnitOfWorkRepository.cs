@@ -10,5 +10,6 @@ namespace UnitOfWork.Interfaces
         IOwnerRepository OwnerRepository { get; }
         IPropertyRepository PropertyRepository { get; }
         IPropertyImageRepository PropertyImageRepository { get; }
+        IPropertyTraceRepository PropertyTraceRepository { get; }
     }
 }

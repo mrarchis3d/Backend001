@@ -223,6 +223,22 @@ namespace Repository.SqlServer
             return false;
         }
         /// <summary>
+        /// Detect if the property is NoUpdate
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <returns></returns>
+        private static bool DetectFiltersNoUpdate<T>(object[] attrs)
+        {
+            foreach (object attr in attrs)
+            {
+                if (attr is T)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
         /// Detect filtering this is for pagination
         /// </summary>
         /// <param name="attrs"></param>
@@ -249,9 +265,13 @@ namespace Repository.SqlServer
         {
             foreach (PropertyInfo prop in parametersObject)
             {
+                object[] attrs = prop.GetCustomAttributes(false);
+                if (DetectFiltersNoUpdate<NoUpdate>(attrs))
+                    continue;
                 parameters.Add(new SqlParameter("@" + prop.Name, prop.GetValue(dtoParameters)));
             }
         }
+
         /// <summary>
         /// Get properties for read
         /// </summary>

@@ -15,6 +15,7 @@ namespace Models.Entities
         public decimal Price { get; set; }
         public string CodeInternal { get; set; }
         public int Year { get; set; }
+        [NoUpdate]
         public Guid IdOwner { get; set; }
     }
 }

@@ -46,6 +46,7 @@ namespace weelo_test_api
             services.AddScoped<IOwnerService, OwnerService>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IPropertyImageService, PropertyImageService>();
+            services.AddScoped<IPropertyTraceService, PropertyTraceService>();
 
         }
 

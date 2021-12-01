@@ -27,7 +27,7 @@ namespace weelo_test_api.Controllers
             _propertyService = propertyService;
         }
         /// <summary>
-        /// Getting All parameters for calling News API
+        /// Get all properties with owner description
         /// </summary>
         /// <returns></returns>
         [HttpPost("GetAllPropertyWithOwner")]
@@ -43,7 +43,7 @@ namespace weelo_test_api.Controllers
 
 
         /// <summary>
-        /// Getting All parameters for calling News API
+        /// create property
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -59,7 +59,7 @@ namespace weelo_test_api.Controllers
 
 
         /// <summary>
-        /// Getting All parameters for calling News API
+        /// Update Property
         /// </summary>
         /// <returns></returns>
         [HttpPut]
@@ -75,7 +75,7 @@ namespace weelo_test_api.Controllers
 
 
         /// <summary>
-        /// Getting All parameters for calling News API
+        /// Delete property
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
