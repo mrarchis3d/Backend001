@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace Repository.SqlServer
+namespace Repository.Queries
 {
     /// <summary>
     /// Repository of Owner
@@ -26,9 +26,10 @@ namespace Repository.SqlServer
         public async Task<Guid> Create(Owner owner)
         {
             var command = "dbo.InsertOwner";
-            var res = await Create(command, owner);
+            Guid res = await Create<Guid>(command, owner);
             return Guid.Parse(res.ToString());
         }
+
         /// <summary>
         /// Delete Method for Owner
         /// </summary>
@@ -59,6 +60,11 @@ namespace Repository.SqlServer
         {
             var command = "dbo.UpdateOwner";
             await Update(command, owner);
+        }
+
+        public Task Update(string command, object dtoParameters)
+        {
+            throw new NotImplementedException();
         }
     }
 }
