@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    public abstract class RepositoryContract
+    public abstract class RepositoryContractADO
     {
         protected SqlConnection _context;
         protected SqlTransaction _transaction;

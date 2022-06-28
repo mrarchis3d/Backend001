@@ -8,7 +8,7 @@ using Repository.Interfaces.Base;
 
 namespace Repository.Queries
 {
-    public abstract class Repository : RepositoryContract, IRepositoryDAO
+    public abstract class Repository : RepositoryContract, IRepositoryADO
     {
         protected SqlConnection _context;
         protected SqlTransaction _transaction;
